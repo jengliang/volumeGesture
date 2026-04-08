@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🎚️ Volume Gesture</h1>
+    <p class="subtitle">Navigate videos with volume gestures</p>
+
+    <div class="setting-group">
+      <label class="toggle-row">
+        <span class="label-text">Enabled</span>
+        <label class="switch">
+          <input type="checkbox" id="enabled" checked>
+          <span class="slider"></span>
+        </label>
+      </label>
+    </div>
+
+    <div class="setting-group">
+      <label class="label-text" for="window">Gesture window (ms)</label>
+      <div class="range-row">
+        <input type="range" id="window" min="300" max="3000" step="50" value="1000">
+        <span class="range-value" id="windowValue">1000</span>
+      </div>
+      <p class="hint">Max time between volume-up and volume-down for a gesture to register.</p>
+    </div>
+
+    <div class="gesture-guide">
+      <div class="gesture">
+        <span class="gesture-icon">🔊→🔉</span>
+        <span class="gesture-label">Vol Up → Down</span>
+        <span class="gesture-action">⏭ Next Video</span>
+      </div>
+      <div class="gesture">
+        <span class="gesture-icon">🔉→🔊</span>
+        <span class="gesture-label">Vol Down → Up</span>
+        <span class="gesture-action">⏮ Previous Video</span>
+      </div>
+    </div>
+
+    <div class="status" id="status"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

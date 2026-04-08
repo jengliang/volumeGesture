@@ -1,0 +1,163 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 320px;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+}
+
+.container {
+  padding: 20px;
+}
+
+h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 18px;
+}
+
+.setting-group {
+  margin-bottom: 16px;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.label-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: #ccc;
+}
+
+/* Toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #444;
+  border-radius: 24px;
+  transition: background 0.25s;
+  cursor: pointer;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.25s;
+}
+
+.switch input:checked + .slider {
+  background: #4f8cff;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(18px);
+}
+
+/* Range input */
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+input[type="range"] {
+  flex: 1;
+  accent-color: #4f8cff;
+  height: 4px;
+}
+
+.range-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4f8cff;
+  min-width: 40px;
+  text-align: right;
+}
+
+.hint {
+  font-size: 11px;
+  color: #666;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* Gesture guide */
+.gesture-guide {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.gesture {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.gesture + .gesture {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gesture-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.gesture-label {
+  font-size: 12px;
+  color: #aaa;
+  flex: 1;
+}
+
+.gesture-action {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4f8cff;
+}
+
+/* Status message */
+.status {
+  font-size: 12px;
+  text-align: center;
+  color: #4caf50;
+  min-height: 18px;
+  transition: opacity 0.3s;
+}
