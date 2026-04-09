@@ -143,8 +143,8 @@ function navigateVideo(gesture, isYouTube) {
   // MSN.com: scroll-to-play feed — scroll by one viewport to bring next/prev video into focus
   if (host.indexOf("msn.com") !== -1) {
     var scrollAmount = gesture === "next"
-      ? window.innerHeight * 0.85
-      : -window.innerHeight * 0.85;
+      ? window.innerHeight
+      : -window.innerHeight;
     window.scrollBy({ top: scrollAmount, behavior: "smooth" });
     showOverlay(gesture);
     return;
