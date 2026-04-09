@@ -1,6 +1,6 @@
 # Volume Gesture — Video Navigator
 
-Navigate between videos using your hardware volume buttons — Bluetooth headset, keyboard volume keys, or system volume controls. Works even when the browser is minimized.
+Navigate between videos using your hardware volume buttons — Bluetooth headset or any headset with volume control. Works even when the browser is minimized.
 
 ## Gestures
 

@@ -2,7 +2,7 @@
 
 ## Short Description (max 132 characters)
 
-Navigate between videos with quick volume gestures from your Bluetooth headset or keyboard, even when the browser is minimized.
+Navigate between videos with quick volume gestures from your Bluetooth headset or any headset with volume control, even when the browser is minimized.
 
 ## Detailed Description
 

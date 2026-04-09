@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Volume Gesture - Video Navigator",
   "version": "4.0.0",
-  "description": "Navigate between videos using hardware volume buttons (Bluetooth headset, keyboard). Up→Down = next video, Down→Up = previous video.",
+  "description": "Navigate between videos using hardware volume buttons (Bluetooth headset or any headset with volume control). Up→Down = next, Down→Up = previous.",
   "permissions": [
     "storage",
     "nativeMessaging",
