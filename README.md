@@ -27,39 +27,26 @@ Or sideload for development:
 1. Go to `edge://extensions/`
 2. Enable **Developer mode**
 3. Click **Load unpacked** and select this folder
+4. Note the **Extension ID** shown under the extension name
 
 ### Step 2: Install the Native Host
 
 The native host monitors your system volume and detects gestures from hardware buttons. This is required for the extension to work.
 
-#### Option A: Standalone Installer (no Python needed)
-
-1. Download the latest `native-host` release from the [Releases page](https://github.com/jengliang/volumnGesture/releases)
-2. Extract the ZIP
+1. Download **native-host-v4.0.0.zip** from the [Releases page](https://github.com/jengliang/volumnGesture/releases)
+2. Extract the ZIP to a permanent location (e.g. `C:\VolumeGesture\`)
 3. Run `install.bat`
-4. When prompted, press Enter to accept the default extension ID (or paste your own if sideloading)
+4. When prompted for the extension ID, either:
+   - Press **Enter** to accept the default (if installed from the store)
+   - Paste your extension ID (if sideloading)
 5. Restart Edge
-
-#### Option B: From Source (requires Python 3.8+)
-
-1. Open a terminal in the `native_host/` folder
-2. Run:
-   ```
-   install.bat
-   ```
-   This will:
-   - Verify Python is installed
-   - Install dependencies (`pycaw`, `comtypes`)
-   - Write the native messaging manifest
-   - Register with Edge
 
 ### Verify
 
-1. Open Edge DevTools (F12) on any page
-2. In the **Console** tab, look for:
-   ```
-   [VolumeGesture] Native host status: connected
-   ```
+Open Edge DevTools (F12) on any page. In the **Console** tab, look for:
+```
+[VolumeGesture] Native host status: connected
+```
 
 ## Settings
 
@@ -68,33 +55,11 @@ Click the Volume Gesture icon in the toolbar to:
 - **Enable/disable** gesture detection
 - **Adjust gesture window** — the maximum time between volume changes (default: 1000 ms)
 
-## How It Works
-
-```
-┌──────────────┐     ┌────────────────┐     ┌─────────────┐
-│  Bluetooth /  │     │  Native Host   │     │   Browser    │
-│  Volume Keys  │────▶│  (Python/exe)  │────▶│  Extension   │
-│               │     │  Polls volume  │     │  background  │
-└──────────────┘     │  Detects       │     │  .js         │
-                     │  gestures      │     └──────┬──────┘
-                     │  Simulates     │            │
-                     │  media keys    │     executeScript
-                     └────────────────┘            │
-                                              ┌────▼──────┐
-                                              │  Content   │
-                                              │  Page      │
-                                              │  Navigate  │
-                                              │  + Overlay  │
-                                              └───────────┘
-```
-
-The native host polls the Windows audio API at ~30 ms intervals, detects up-down or down-up volume patterns, and simulates OS media keys. YouTube responds to media keys natively (even when minimized). For other sites, the extension injects navigation logic via `executeScript`.
-
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| Console shows "Native host disconnected" | Check `native_host/debug.log` for errors. Ensure Python is in PATH. |
+| Console shows "Native host disconnected" | Check `debug.log` in the native host folder for errors |
 | Overlay shows but video doesn't change | Site navigation selectors may have changed. [File an issue.](https://github.com/jengliang/volumnGesture/issues) |
 | False triggers from repeated presses | Increase the gesture window in settings, or update to the latest version |
 | Gestures stop after switching audio device | The native host re-acquires the device every 5 seconds. Wait a moment and retry. |
@@ -102,7 +67,7 @@ The native host polls the Windows audio API at ~30 ms intervals, detects up-down
 ## Uninstall
 
 1. Remove the extension from `edge://extensions/`
-2. Run `native_host/uninstall.bat` to remove the registry entry
+2. Run `uninstall.bat` in the native host folder to remove the registry entry
 
 ## Building from Source
 
@@ -112,18 +77,16 @@ The native host polls the Windows audio API at ~30 ms intervals, detects up-down
 python build.py
 ```
 
-Creates `volumnGesture-<version>.zip` containing only the extension files.
+### Build Standalone Native Host
 
-### Build Standalone Native Host (no Python dependency)
-
-On a Windows machine with Python:
+On a Windows machine with Python 3.8+:
 
 ```
 cd native_host
 build_exe.bat
 ```
 
-Creates `volume_monitor.exe` via PyInstaller. Distribute this along with `install.bat` and `uninstall.bat`.
+Creates `volume_monitor.exe` via PyInstaller.
 
 ## Privacy
 

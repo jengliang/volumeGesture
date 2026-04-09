@@ -1,1 +1,9 @@
+# PyInstaller build artifacts
+native_host/build/
+native_host/dist/
+native_host/*.spec
+native_host/volume_monitor.exe
 native_host/debug.log
+
+# Release ZIPs
+*.zip
