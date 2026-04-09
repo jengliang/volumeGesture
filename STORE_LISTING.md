@@ -2,7 +2,7 @@
 
 ## Short Description (max 132 characters)
 
-Navigate between videos with quick volume gestures. Works with Bluetooth headsets, even when the browser is minimized.
+Navigate between videos with quick volume gestures from your Bluetooth headset or keyboard, even when the browser is minimized.
 
 ## Detailed Description
 
@@ -19,13 +19,13 @@ Volume Gesture lets you skip to the next or previous video using quick volume bu
 
 **Key features:**
 - Bluetooth headset support — control videos with your headset's volume buttons, even while the browser is minimized or in the background
-- In-player volume slider gestures — drag up-then-down or down-then-up on any HTML5 video player
+- Keyboard volume keys — works with any volume control that changes the system volume
 - Smart gesture detection — filters out accidental triggers with adaptive thresholds
 - Visual feedback — a brief on-screen overlay confirms each gesture
 - Configurable timing — adjust the gesture detection window from the popup settings
 
-**Optional Native Host (for Bluetooth/system volume):**
-To use hardware volume buttons (Bluetooth headset, keyboard media keys), install the companion native host application. Download it from the extension's GitHub page. Without the native host, gestures still work via the in-player volume slider.
+**Setup:**
+Install the extension, then download and run the companion native host installer from the extension's GitHub page. The native host monitors your system volume to detect gestures from hardware buttons. A standalone installer is available that requires no additional software.
 
 ## Category
 

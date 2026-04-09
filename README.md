@@ -1,6 +1,6 @@
 # Volume Gesture — Video Navigator
 
-Navigate between videos using quick volume button sequences. Works with Bluetooth headsets, keyboard volume keys, and in-player volume sliders — even when the browser is minimized.
+Navigate between videos using your hardware volume buttons — Bluetooth headset, keyboard volume keys, or system volume controls. Works even when the browser is minimized.
 
 ## Gestures
 
@@ -28,9 +28,9 @@ Or sideload for development:
 2. Enable **Developer mode**
 3. Click **Load unpacked** and select this folder
 
-### Step 2: Install the Native Host (for Bluetooth / system volume)
+### Step 2: Install the Native Host
 
-The browser extension handles in-player volume slider gestures out of the box. To use **hardware volume buttons** (Bluetooth headset, keyboard media keys, system tray slider), install the companion native host.
+The native host monitors your system volume and detects gestures from hardware buttons. This is required for the extension to work.
 
 #### Option A: Standalone Installer (no Python needed)
 
@@ -81,21 +81,19 @@ Click the Volume Gesture icon in the toolbar to:
                      │  media keys    │     executeScript
                      └────────────────┘            │
                                               ┌────▼──────┐
-┌──────────────┐     ┌────────────────┐      │  Content   │
-│  In-player   │     │  content.js    │      │  Page      │
-│  Volume      │────▶│  volumechange  │      │  Navigate  │
-│  Slider      │     │  event         │──────▶  + Overlay  │
-└──────────────┘     └────────────────┘      └───────────┘
+                                              │  Content   │
+                                              │  Page      │
+                                              │  Navigate  │
+                                              │  + Overlay  │
+                                              └───────────┘
 ```
 
-- **Hardware volume** (Bluetooth, keyboard): The native host polls the Windows audio API at ~30 ms intervals, detects up-down or down-up patterns, and simulates OS media keys. YouTube responds to media keys natively (even when minimized). For other sites, the extension injects navigation logic via `executeScript`.
-- **In-player slider**: The content script listens for `volumechange` events on `<video>` elements and applies the same gesture detection.
+The native host polls the Windows audio API at ~30 ms intervals, detects up-down or down-up volume patterns, and simulates OS media keys. YouTube responds to media keys natively (even when minimized). For other sites, the extension injects navigation logic via `executeScript`.
 
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| Gestures work with slider but not headset | Native host not installed — see Step 2 above |
 | Console shows "Native host disconnected" | Check `native_host/debug.log` for errors. Ensure Python is in PATH. |
 | Overlay shows but video doesn't change | Site navigation selectors may have changed. [File an issue.](https://github.com/jengliang/volumnGesture/issues) |
 | False triggers from repeated presses | Increase the gesture window in settings, or update to the latest version |

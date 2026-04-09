@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Volume Gesture - Video Navigator",
-  "version": "3.1.0",
-  "description": "Use rapid volume adjustments (including Bluetooth headset) to navigate between videos. Up→Down = next video, Down→Up = previous video.",
+  "version": "4.0.0",
+  "description": "Navigate between videos using hardware volume buttons (Bluetooth headset, keyboard). Up→Down = next video, Down→Up = previous video.",
   "permissions": [
     "storage",
     "nativeMessaging",
@@ -16,15 +16,6 @@
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": ["content.js"],
-      "run_at": "document_idle"
-    }
-  ],
   "action": {
     "default_popup": "popup.html",
     "default_title": "Volume Gesture Settings"

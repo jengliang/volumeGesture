@@ -17,7 +17,6 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 EXTENSION_FILES = [
     "manifest.json",
     "background.js",
-    "content.js",
     "popup.html",
     "popup.js",
     "styles.css",
