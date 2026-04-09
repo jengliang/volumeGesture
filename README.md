@@ -64,6 +64,11 @@ Click the Volume Gesture icon in the toolbar to:
 | False triggers from repeated presses | Increase the gesture window in settings, or update to the latest version |
 | Gestures stop after switching audio device | The native host re-acquires the device every 5 seconds. Wait a moment and retry. |
 
+## Limitations
+
+- Some headsets have device-level volume controls that do not affect the OS volume. Since Volume Gesture monitors the system volume, these headsets will not trigger gestures. Look for headsets whose volume buttons adjust the Windows system volume.
+- When the browser is minimized, Facebook does not process JavaScript events. Video navigation actions will queue up and execute all at once when the browser is restored. To use volume gestures with Facebook, keep the browser window on the desktop — you can switch focus to other apps, just don't minimize it. YouTube does not have this limitation.
+
 ## Uninstall
 
 1. Remove the extension from `edge://extensions/`
