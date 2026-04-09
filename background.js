@@ -140,6 +140,16 @@ function navigateVideo(gesture, isYouTube) {
     return;
   }
 
+  // MSN.com: scroll-to-play feed — scroll by one viewport to bring next/prev video into focus
+  if (host.indexOf("msn.com") !== -1) {
+    var scrollAmount = gesture === "next"
+      ? window.innerHeight * 0.85
+      : -window.innerHeight * 0.85;
+    window.scrollBy({ top: scrollAmount, behavior: "smooth" });
+    showOverlay(gesture);
+    return;
+  }
+
   var genericLabels = gesture === "next"
     ? ["next", "skip", "forward", "Next video"]
     : ["previous", "prev", "back", "Previous video"];
@@ -162,8 +172,16 @@ function navigateVideo(gesture, isYouTube) {
     var tIdx = gesture === "next" ? bIdx + 1 : bIdx - 1;
     if (tIdx >= 0 && tIdx < allVids.length) {
       allVids[tIdx].scrollIntoView({ behavior: "smooth", block: "center" });
+      showOverlay(gesture);
+      return;
     }
   }
+
+  // Fallback for any feed-style site: scroll by one viewport
+  var fallbackScroll = gesture === "next"
+    ? window.innerHeight * 0.85
+    : -window.innerHeight * 0.85;
+  window.scrollBy({ top: fallbackScroll, behavior: "smooth" });
   showOverlay(gesture);
 }
 
