@@ -9,8 +9,8 @@ Navigate between videos with quick volume gestures from your Bluetooth headset o
 Volume Gesture lets you skip to the next or previous video using quick volume button sequences on your headset or keyboard — no need to touch the screen or switch apps.
 
 **How it works:**
-- Volume Up then Down (within 1 second) → Next video
-- Volume Down then Up (within 1 second) → Previous video
+- Volume Up then Down (within the configured window, 1–4 seconds) → Next video
+- Volume Down then Up (within the configured window, 1–4 seconds) → Previous video
 
 **Works everywhere:**
 - YouTube — uses built-in next/previous navigation
@@ -22,7 +22,7 @@ Volume Gesture lets you skip to the next or previous video using quick volume bu
 - Keyboard volume keys — works with any volume control that changes the system volume
 - Smart gesture detection — filters out accidental triggers with adaptive thresholds
 - Visual feedback — a brief on-screen overlay confirms each gesture
-- Configurable timing — adjust the gesture detection window from the popup settings
+- Configurable timing — gesture window 1–4 s; feed scroll 80–100% for scroll-to-play sites (e.g. MSN)
 
 **Setup:**
 1. Install from the Microsoft Edge Add-ons Store: [Volume Gesture](https://microsoftedge.microsoft.com/addons/detail/dafhmbjblhplgpnbkbhajnpheaenfdcb)

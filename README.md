@@ -6,8 +6,8 @@ Navigate between videos using your hardware volume buttons — Bluetooth headset
 
 | Action | Gesture |
 |--------|---------|
-| **Next video** | Volume Up then Down (within 1 second) |
-| **Previous video** | Volume Down then Up (within 1 second) |
+| **Next video** | Volume Up then Down (within the configured gesture window, 1–4 s) |
+| **Previous video** | Volume Down then Up (within the configured gesture window, 1–4 s) |
 
 A translucent overlay briefly confirms each detected gesture.
 
@@ -37,7 +37,7 @@ Or sideload for development:
 
 The native host monitors your system volume and detects gestures from hardware buttons. This is required for the extension to work.
 
-1. Download **native-host-v4.0.0.zip** from the [Releases page](https://github.com/jengliang/volumnGesture/releases)
+1. Download **native-host-v4.1.0.zip** from the [Releases page](https://github.com/jengliang/volumnGesture/releases)
 2. Extract the ZIP to a permanent location (e.g. `C:\VolumeGesture\`)
 3. Run `install.bat`
 4. When prompted for the extension ID, either:
