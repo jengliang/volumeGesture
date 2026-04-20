@@ -21,7 +21,11 @@ A translucent overlay briefly confirms each detected gesture.
 
 ### Step 1: Install the Extension
 
-Install from the [Microsoft Edge Add-ons Store](https://microsoftedge.microsoft.com/addons/) (search "Volume Gesture").
+**Recommended:** install from the Microsoft Edge Add-ons Store:
+
+[Volume Gesture — Video Navigator](https://microsoftedge.microsoft.com/addons/detail/dafhmbjblhplgpnbkbhajnpheaenfdcb)
+
+After store install, the extension ID is **`dafhmbjblhplgpnbkbhajnpheaenfdcb`** (used by the native host installer default).
 
 Or sideload for development:
 1. Go to `edge://extensions/`
@@ -37,8 +41,8 @@ The native host monitors your system volume and detects gestures from hardware b
 2. Extract the ZIP to a permanent location (e.g. `C:\VolumeGesture\`)
 3. Run `install.bat`
 4. When prompted for the extension ID, either:
-   - Press **Enter** to accept the default (if installed from the store)
-   - Paste your extension ID (if sideloading)
+   - Press **Enter** to accept the default **`dafhmbjblhplgpnbkbhajnpheaenfdcb`** (Edge Add-ons install)
+   - Paste your extension ID from `edge://extensions/` (if sideloading)
 5. Restart Edge
 
 ### Verify

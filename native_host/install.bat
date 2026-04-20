@@ -78,16 +78,17 @@ echo [2/3] Configuring native messaging host...
 echo.
 echo The extension ID identifies your Volume Gesture installation.
 echo.
-echo If you installed from the Edge Add-ons Store, your ID is:
-echo   kdfcohjeeijddaekjdlnmcofadadmopc
+echo If you installed from the Microsoft Edge Add-ons Store, press Enter to use the default ID:
+echo   dafhmbjblhplgpnbkbhajnpheaenfdcb
+echo   Store: https://microsoftedge.microsoft.com/addons/detail/dafhmbjblhplgpnbkbhajnpheaenfdcb
 echo.
-echo If you sideloaded the extension, find your ID at edge://extensions/
+echo If you sideloaded the extension, find your ID at edge://extensions/ and paste it.
 echo.
 set /p EXT_ID="Enter extension ID (or press Enter for store default): "
 
 if "!EXT_ID!"=="" (
-    set "EXT_ID=kdfcohjeeijddaekjdlnmcofadadmopc"
-    echo        Using default store ID: !EXT_ID!
+    set "EXT_ID=dafhmbjblhplgpnbkbhajnpheaenfdcb"
+    echo        Using default store extension ID: !EXT_ID!
 )
 
 :: Write manifest with correct paths
