@@ -53,7 +53,8 @@ Open Edge DevTools (F12) on any page. In the **Console** tab, look for:
 Click the Volume Gesture icon in the toolbar to:
 
 - **Enable/disable** gesture detection
-- **Adjust gesture window** — the maximum time between volume changes (default: 1000 ms)
+- **Gesture window** — maximum time between volume changes (1000–4000 ms, default 1000 ms)
+- **Feed scroll** — for scroll-to-play sites such as MSN, how far each gesture scrolls the page (80–100% of the viewport, default 100%)
 
 ## Troubleshooting
 

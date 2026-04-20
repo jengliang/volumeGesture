@@ -22,10 +22,19 @@
     <div class="setting-group">
       <label class="label-text" for="window">Gesture window (ms)</label>
       <div class="range-row">
-        <input type="range" id="window" min="300" max="3000" step="50" value="1000">
+        <input type="range" id="window" min="1000" max="4000" step="50" value="1000">
         <span class="range-value" id="windowValue">1000</span>
       </div>
-      <p class="hint">Max time between volume-up and volume-down for a gesture to register.</p>
+      <p class="hint">Max time between volume-up and volume-down for a gesture to register (1–4 s).</p>
+    </div>
+
+    <div class="setting-group">
+      <label class="label-text" for="scrollPct">Feed scroll (% of viewport)</label>
+      <div class="range-row">
+        <input type="range" id="scrollPct" min="80" max="100" step="1" value="100">
+        <span class="range-value" id="scrollPctValue">100</span>
+      </div>
+      <p class="hint">For scroll-to-play sites (e.g. MSN): how far each gesture scrolls the page.</p>
     </div>
 
     <div class="gesture-guide">

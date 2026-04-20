@@ -35,11 +35,14 @@ function connectNativeHost() {
   });
 
   // Send current settings to native host
-  chrome.storage.sync.get({ gestureWindowMs: 1000 }, (items) => {
-    if (port) {
-      port.postMessage({ type: "config", gestureWindowMs: items.gestureWindowMs });
+  chrome.storage.sync.get(
+    { gestureWindowMs: 1000, feedScrollPercent: 100 },
+    (items) => {
+      if (port) {
+        port.postMessage({ type: "config", gestureWindowMs: items.gestureWindowMs });
+      }
     }
-  });
+  );
 }
 
 function scheduleReconnect() {
@@ -48,6 +51,11 @@ function scheduleReconnect() {
 
 async function handleGesture(gesture) {
   try {
+    const items = await chrome.storage.sync.get({
+      feedScrollPercent: 100,
+    });
+    const scrollPct = Math.min(100, Math.max(80, items.feedScrollPercent || 100));
+
     let tabs = await chrome.tabs.query({ audible: true });
     if (!tabs || tabs.length === 0) {
       tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
@@ -63,7 +71,7 @@ async function handleGesture(gesture) {
       await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: navigateVideo,
-        args: [gesture, isYouTube],
+        args: [gesture, isYouTube, scrollPct],
       });
     }
   } catch (e) {
@@ -72,7 +80,10 @@ async function handleGesture(gesture) {
 }
 
 // This function is injected into the tab
-function navigateVideo(gesture, isYouTube) {
+function navigateVideo(gesture, isYouTube, feedScrollPercent) {
+  var scrollFrac = (typeof feedScrollPercent === "number" ? feedScrollPercent : 100) / 100;
+  if (scrollFrac < 0.8) scrollFrac = 0.8;
+  if (scrollFrac > 1) scrollFrac = 1;
   function showOverlay(g) {
     var overlay = document.getElementById("__vol_gesture_overlay");
     if (!overlay) {
@@ -143,8 +154,8 @@ function navigateVideo(gesture, isYouTube) {
   // MSN.com: scroll-to-play feed — scroll by one viewport to bring next/prev video into focus
   if (host.indexOf("msn.com") !== -1) {
     var scrollAmount = gesture === "next"
-      ? window.innerHeight
-      : -window.innerHeight;
+      ? window.innerHeight * scrollFrac
+      : -window.innerHeight * scrollFrac;
     window.scrollBy({ top: scrollAmount, behavior: "smooth" });
     showOverlay(gesture);
     return;
@@ -177,10 +188,10 @@ function navigateVideo(gesture, isYouTube) {
     }
   }
 
-  // Fallback for any feed-style site: scroll by one viewport
+  // Fallback for any feed-style site: scroll by configured fraction of viewport
   var fallbackScroll = gesture === "next"
-    ? window.innerHeight * 0.85
-    : -window.innerHeight * 0.85;
+    ? window.innerHeight * scrollFrac
+    : -window.innerHeight * scrollFrac;
   window.scrollBy({ top: fallbackScroll, behavior: "smooth" });
   showOverlay(gesture);
 }

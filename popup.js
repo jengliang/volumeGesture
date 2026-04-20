@@ -2,14 +2,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const enabledEl = document.getElementById("enabled");
   const windowEl = document.getElementById("window");
   const windowValueEl = document.getElementById("windowValue");
+  const scrollPctEl = document.getElementById("scrollPct");
+  const scrollPctValueEl = document.getElementById("scrollPctValue");
   const statusEl = document.getElementById("status");
 
   chrome.storage.sync.get(
-    { enabled: true, gestureWindowMs: 1000 },
+    { enabled: true, gestureWindowMs: 1000, feedScrollPercent: 100 },
     (items) => {
       enabledEl.checked = items.enabled;
-      windowEl.value = items.gestureWindowMs;
-      windowValueEl.textContent = items.gestureWindowMs;
+      let gwm = items.gestureWindowMs;
+      if (gwm < 1000) gwm = 1000;
+      if (gwm > 4000) gwm = 4000;
+      windowEl.value = gwm;
+      windowValueEl.textContent = gwm;
+      let pct = items.feedScrollPercent;
+      if (pct < 80) pct = 80;
+      if (pct > 100) pct = 100;
+      scrollPctEl.value = pct;
+      scrollPctValueEl.textContent = pct;
     }
   );
 
@@ -17,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const settings = {
       enabled: enabledEl.checked,
       gestureWindowMs: parseInt(windowEl.value, 10),
+      feedScrollPercent: parseInt(scrollPctEl.value, 10),
     };
     chrome.storage.sync.set(settings, () => {
       statusEl.textContent = "Settings saved";
@@ -33,4 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
     windowValueEl.textContent = windowEl.value;
   });
   windowEl.addEventListener("change", save);
+
+  scrollPctEl.addEventListener("input", () => {
+    scrollPctValueEl.textContent = scrollPctEl.value;
+  });
+  scrollPctEl.addEventListener("change", save);
 });
