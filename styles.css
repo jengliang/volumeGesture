@@ -28,6 +28,13 @@ h1 {
   margin-bottom: 18px;
 }
 
+.version {
+  margin-top: 14px;
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+}
+
 .setting-group {
   margin-bottom: 16px;
 }

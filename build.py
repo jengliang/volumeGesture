@@ -3,13 +3,13 @@
 Package the Volume Gesture extension into a ZIP for Edge Add-ons Store submission.
 
 Usage:
-    python build.py                  # creates volumnGesture-<version>.zip
-    python build.py --native-host    # also creates volumnGesture-native-host-<version>.zip
+    python build.py                  # creates volumeGesture-<version>.zip
+    python build.py --native-host    # also creates native-host-<version>.zip (GitHub release asset)
 """
 
-import argparse
 import json
 import os
+import sys
 import zipfile
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -40,36 +40,45 @@ def get_version():
         return json.load(f)["version"]
 
 
+def get_native_host_files():
+    """Paths under SCRIPT_DIR; includes volume_monitor.exe when present (release bundle)."""
+    out = list(NATIVE_HOST_FILES)
+    exe_rel = "native_host/volume_monitor.exe"
+    if os.path.exists(os.path.join(SCRIPT_DIR, exe_rel)):
+        out.append(exe_rel)
+    return out
+
+
 def build_zip(name, files):
     out_path = os.path.join(SCRIPT_DIR, name)
-    with zipfile.ZipFile(out_path, "w", zipfile.ZIP_DEFLATED) as zf:
+    zf = zipfile.ZipFile(out_path, "w", zipfile.ZIP_DEFLATED)
+    try:
         for rel in files:
             full = os.path.join(SCRIPT_DIR, rel)
             if not os.path.exists(full):
-                print(f"  WARNING: missing {rel}, skipping")
+                print("  WARNING: missing %s, skipping" % rel)
                 continue
             zf.write(full, rel)
-            print(f"  + {rel}")
+            print("  + %s" % rel)
+    finally:
+        zf.close()
     size_kb = os.path.getsize(out_path) / 1024
-    print(f"\nCreated {name} ({size_kb:.1f} KB)")
+    print("\nCreated %s (%.1f KB)" % (name, size_kb))
     return out_path
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Package Volume Gesture extension")
-    parser.add_argument("--native-host", action="store_true",
-                        help="Also package the native host as a separate ZIP")
-    args = parser.parse_args()
+    native_host = "--native-host" in sys.argv
 
     version = get_version()
-    print(f"Volume Gesture v{version}\n")
+    print("Volume Gesture v%s\n" % version)
 
     print("=== Extension ZIP (for store submission) ===")
-    build_zip(f"volumnGesture-{version}.zip", EXTENSION_FILES)
+    build_zip("volumeGesture-%s.zip" % version, EXTENSION_FILES)
 
-    if args.native_host:
-        print(f"\n=== Native Host ZIP ===")
-        build_zip(f"volumnGesture-native-host-{version}.zip", NATIVE_HOST_FILES)
+    if native_host:
+        print("\n=== Native Host ZIP ===")
+        build_zip("native-host-%s.zip" % version, get_native_host_files())
 
 
 if __name__ == "__main__":

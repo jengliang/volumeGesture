@@ -1,3 +1,6 @@
+# Python
+*.pyc
+
 # PyInstaller build artifacts
 native_host/build/
 native_host/dist/

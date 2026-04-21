@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const verEl = document.getElementById("version");
+  if (verEl) {
+    const v = chrome.runtime.getManifest().version;
+    verEl.textContent = `v${v}`;
+  }
+
   const enabledEl = document.getElementById("enabled");
   const windowEl = document.getElementById("window");
   const windowValueEl = document.getElementById("windowValue");

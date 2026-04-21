@@ -16,6 +16,9 @@ import comtypes
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import IAudioEndpointVolume
 
+# Keep in sync with the extension manifest.json "version".
+NATIVE_HOST_VERSION = "4.1.0"
+
 VK_MEDIA_NEXT_TRACK = 0xB0
 VK_MEDIA_PREV_TRACK = 0xB1
 KEYEVENTF_KEYUP = 0x0002
@@ -206,7 +209,11 @@ class VolumeMonitor:
         self._last_reacquire = 0.0
 
     def start(self):
-        send_message({"type": "status", "status": "starting"})
+        send_message({
+            "type": "status",
+            "status": "starting",
+            "version": NATIVE_HOST_VERSION,
+        })
 
         try:
             self._endpoint = get_audio_endpoint()
@@ -220,6 +227,7 @@ class VolumeMonitor:
             "type": "status",
             "status": "connected",
             "volume": volume,
+            "version": NATIVE_HOST_VERSION,
         })
 
         poll_thread = threading.Thread(target=self._poll_loop, daemon=True)

@@ -26,7 +26,7 @@ Volume Gesture lets you skip to the next or previous video using quick volume bu
 
 **Setup:**
 1. Install from the Microsoft Edge Add-ons Store: [Volume Gesture](https://microsoftedge.microsoft.com/addons/detail/dafhmbjblhplgpnbkbhajnpheaenfdcb)
-2. Download **native-host** ZIP from the [GitHub Releases](https://github.com/jengliang/volumnGesture/releases), extract, run `install.bat`, and press Enter when asked for the extension ID (defaults to the store extension).
+2. Download **`native-host-4.1.0.zip`** from the **[v4.1.0 release](https://github.com/jengliang/volumeGesture/releases/tag/v4.1.0)** on GitHub, extract, run `install.bat`, and press Enter when asked for the extension ID (defaults to the store extension).
 
 The native host monitors your system volume to detect gestures from hardware buttons. A standalone `.exe` build requires no Python.
 
@@ -36,8 +36,8 @@ Productivity
 
 ## Support URL
 
-https://github.com/jengliang/volumnGesture/issues
+https://github.com/jengliang/volumeGesture/issues
 
 ## Website URL
 
-https://github.com/jengliang/volumnGesture
+https://github.com/jengliang/volumeGesture

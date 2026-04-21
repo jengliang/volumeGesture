@@ -1,6 +1,6 @@
 # Privacy Policy — Volume Gesture
 
-**Last updated:** April 8, 2026
+**Last updated:** April 21, 2026 (extension / native host v4.1.0)
 
 ## Data Collection
 
@@ -33,4 +33,4 @@ If this policy changes, the update will be posted here with a new date.
 
 ## Contact
 
-For questions about this policy, open an issue at https://github.com/jengliang/volumnGesture/issues.
+For questions about this policy, open an issue at https://github.com/jengliang/volumeGesture/issues.

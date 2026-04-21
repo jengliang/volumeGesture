@@ -20,7 +20,8 @@ function connectNativeHost() {
       console.log("[VolumeGesture] Gesture detected:", msg.gesture);
       handleGesture(msg.gesture);
     } else if (msg.type === "status") {
-      console.log("[VolumeGesture] Native host status:", msg.status);
+      const hostVer = msg.version ? ` (native host ${msg.version})` : "";
+      console.log("[VolumeGesture] Native host status:", msg.status + hostVer);
     } else if (msg.type === "error") {
       console.error("[VolumeGesture] Native host error:", msg.error);
     }

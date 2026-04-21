@@ -1,7 +1,7 @@
 {
   "name": "com.volgesture.volumemonitor",
   "description": "Volume Gesture - System volume monitor for video navigation",
-  "path": "Z:\\prs\\volumnGesture\\native_host\\volume_monitor_wrapper.bat",
+  "path": "C:\\VolumeGesture\\volume_monitor.exe",
   "type": "stdio",
   "allowed_origins": [
     "chrome-extension://dafhmbjblhplgpnbkbhajnpheaenfdcb/"
