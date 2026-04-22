@@ -237,29 +237,35 @@ class VolumeMonitor:
 
         self._read_loop()
 
-    def _reacquire_endpoint(self):
-        """Re-acquire audio endpoint to handle device switches."""
+    def _reacquire_endpoint(self, notify=False):
+        """Re-acquire audio endpoint to handle device switches.
+
+        notify=True sends a status message (used after error recovery /
+        device switch); routine periodic reacquires stay silent.
+        """
         try:
             self._endpoint = get_audio_endpoint()
             self._last_reacquire = time.monotonic()
             volume = self._endpoint.GetMasterVolumeLevelScalar()
             with self._lock:
                 self._detector.reset(volume)
-            send_message({"type": "status", "status": "device_refreshed"})
+            if notify:
+                send_message({"type": "status", "status": "device_refreshed"})
         except Exception:
             pass
 
     def _poll_loop(self):
         comtypes.CoInitialize()
         try:
-            # Re-acquire endpoint on this thread so COM apartment is correct
-            self._reacquire_endpoint()
+            # Re-acquire endpoint on this thread so COM apartment is correct (silent).
+            self._reacquire_endpoint(notify=False)
 
             while self._running:
                 now = time.monotonic()
 
                 if now - self._last_reacquire >= DEVICE_REACQUIRE_INTERVAL:
-                    self._reacquire_endpoint()
+                    # Periodic silent refresh; no status message needed.
+                    self._reacquire_endpoint(notify=False)
 
                 try:
                     volume = self._endpoint.GetMasterVolumeLevelScalar()
@@ -275,7 +281,8 @@ class VolumeMonitor:
                                 simulate_media_key(VK_MEDIA_PREV_TRACK)
                         send_message({"type": "gesture", "gesture": gesture})
                 except Exception:
-                    self._reacquire_endpoint()
+                    # Notify on error-driven reacquire — that's a real device change.
+                    self._reacquire_endpoint(notify=True)
                 time.sleep(0.03)
         finally:
             comtypes.CoUninitialize()
