@@ -207,6 +207,8 @@ class VolumeMonitor:
         self._detector = GestureDetector()
         self._endpoint = None
         self._last_reacquire = 0.0
+        # When False, skip VK_MEDIA_* (e.g. YouTube Shorts — extension handles in-page).
+        self._simulate_media_keys = True
 
     def start(self):
         send_message({
@@ -264,10 +266,13 @@ class VolumeMonitor:
                     with self._lock:
                         gesture = self._detector.update(volume, now)
                     if gesture:
-                        if gesture == "next":
-                            simulate_media_key(VK_MEDIA_NEXT_TRACK)
-                        else:
-                            simulate_media_key(VK_MEDIA_PREV_TRACK)
+                        with self._lock:
+                            do_keys = self._simulate_media_keys
+                        if do_keys:
+                            if gesture == "next":
+                                simulate_media_key(VK_MEDIA_NEXT_TRACK)
+                            else:
+                                simulate_media_key(VK_MEDIA_PREV_TRACK)
                         send_message({"type": "gesture", "gesture": gesture})
                 except Exception:
                     self._reacquire_endpoint()
@@ -287,6 +292,11 @@ class VolumeMonitor:
                     if "gestureWindowMs" in msg:
                         with self._lock:
                             self._detector.gesture_window = msg["gestureWindowMs"] / 1000.0
+                    if "simulateMediaKeys" in msg:
+                        with self._lock:
+                            self._simulate_media_keys = bool(
+                                msg["simulateMediaKeys"]
+                            )
                 elif msg.get("type") == "quit":
                     break
             except Exception:

@@ -35,19 +35,50 @@ function connectNativeHost() {
     scheduleReconnect();
   });
 
-  // Send current settings to native host
+  // Send current settings + whether to fire OS media keys (off on YouTube Shorts)
   chrome.storage.sync.get(
     { gestureWindowMs: 1000, feedScrollPercent: 100 },
     (items) => {
-      if (port) {
-        port.postMessage({ type: "config", gestureWindowMs: items.gestureWindowMs });
-      }
+      if (!port) return;
+      shouldSimulateMediaKeysForGestureContext().then((simulateMediaKeys) => {
+        if (port) {
+          port.postMessage({
+            type: "config",
+            gestureWindowMs: items.gestureWindowMs,
+            simulateMediaKeys,
+          });
+        }
+      });
     }
   );
 }
 
 function scheduleReconnect() {
   setTimeout(connectNativeHost, RECONNECT_DELAY_MS);
+}
+
+/** Same tab priority as handleGesture: audible tab, else active in last-focused window. */
+async function shouldSimulateMediaKeysForGestureContext() {
+  let tabs = await chrome.tabs.query({ audible: true });
+  if (!tabs || tabs.length === 0) {
+    tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  }
+  if (!tabs || tabs.length === 0) return true;
+  const url = tabs[0].url || "";
+  const isShorts =
+    url.indexOf("youtube.com") !== -1 && url.indexOf("/shorts") !== -1;
+  // Shorts: extension navigates in-page; skip OS media keys to avoid double advance.
+  return !isShorts;
+}
+
+async function updateNativeSimulateMediaKeys() {
+  if (!port) return;
+  try {
+    const simulateMediaKeys = await shouldSimulateMediaKeysForGestureContext();
+    port.postMessage({ type: "config", simulateMediaKeys });
+  } catch (e) {
+    console.warn("[VolumeGesture] updateNativeSimulateMediaKeys:", e);
+  }
 }
 
 async function handleGesture(gesture) {
@@ -67,6 +98,22 @@ async function handleGesture(gesture) {
       if (!tab.url) continue;
       if (tab.url.startsWith("chrome://") || tab.url.startsWith("edge://")) continue;
 
+      const isShorts =
+        tab.url.indexOf("youtube.com") !== -1 &&
+        tab.url.indexOf("/shorts") !== -1;
+
+      // YouTube Shorts is a vertical reel: OS media keys often don't map to next/prev
+      // the way they do on watch pages. Run in MAIN world so key events reach YouTube.
+      if (isShorts) {
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          world: "MAIN",
+          func: navigateYouTubeShorts,
+          args: [gesture],
+        });
+        continue;
+      }
+
       var isYouTube = tab.url.indexOf("youtube.com") !== -1;
 
       await chrome.scripting.executeScript({
@@ -78,6 +125,77 @@ async function handleGesture(gesture) {
   } catch (e) {
     console.error("[VolumeGesture] executeScript failed:", e);
   }
+}
+
+// Injected into the page MAIN world — YouTube Shorts only
+function navigateYouTubeShorts(gesture) {
+  function showOverlay(g) {
+    var overlay = document.getElementById("__vol_gesture_overlay");
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.id = "__vol_gesture_overlay";
+      overlay.style.cssText =
+        "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.8);" +
+        "background:rgba(0,0,0,0.78);color:#fff;font-family:'Segoe UI',system-ui,sans-serif;" +
+        "font-size:22px;font-weight:600;padding:16px 32px;border-radius:12px;" +
+        "z-index:2147483647;pointer-events:none;opacity:0;" +
+        "transition:opacity 0.2s ease,transform 0.2s ease;text-align:center;" +
+        "backdrop-filter:blur(6px);box-shadow:0 4px 24px rgba(0,0,0,0.3);";
+      document.body.appendChild(overlay);
+    }
+    overlay.textContent = g === "next" ? "\u23ED Next Video" : "\u23EE Previous Video";
+    overlay.style.opacity = "1";
+    overlay.style.transform = "translate(-50%,-50%) scale(1)";
+    clearTimeout(overlay._ht);
+    overlay._ht = setTimeout(function () {
+      overlay.style.opacity = "0";
+      overlay.style.transform = "translate(-50%,-50%) scale(0.8)";
+    }, 1500);
+  }
+
+  showOverlay(gesture);
+
+  function clickNavButton(containerId) {
+    var el = document.getElementById(containerId);
+    if (!el) return false;
+    var btn = el.querySelector("button");
+    if (btn) {
+      btn.click();
+      return true;
+    }
+    if (typeof el.click === "function") {
+      el.click();
+      return true;
+    }
+    return false;
+  }
+
+  if (gesture === "next") {
+    if (clickNavButton("navigation-button-down")) return;
+  } else {
+    if (clickNavButton("navigation-button-up")) return;
+  }
+
+  var key = gesture === "next" ? "ArrowDown" : "ArrowUp";
+  var keyCode = gesture === "next" ? 40 : 38;
+  var init = {
+    key: key,
+    code: key,
+    keyCode: keyCode,
+    which: keyCode,
+    bubbles: true,
+    cancelable: true,
+    composed: true,
+  };
+  // Shorts listens for ArrowUp/ArrowDown (see in-page MediaSession hacks); avoid also
+  // scrolling the viewport or we may advance twice.
+  var sp = document.getElementById("shorts-player");
+  if (sp) {
+    sp.dispatchEvent(new KeyboardEvent("keydown", init));
+    sp.dispatchEvent(new KeyboardEvent("keyup", init));
+  }
+  document.dispatchEvent(new KeyboardEvent("keydown", init));
+  document.dispatchEvent(new KeyboardEvent("keyup", init));
 }
 
 // This function is injected into the tab
@@ -205,6 +323,16 @@ chrome.storage.onChanged.addListener((changes) => {
       gestureWindowMs: changes.gestureWindowMs.newValue,
     });
   }
+});
+
+chrome.tabs.onActivated.addListener(() => {
+  void updateNativeSimulateMediaKeys();
+});
+chrome.tabs.onUpdated.addListener((_tabId, changeInfo) => {
+  if (changeInfo.url) void updateNativeSimulateMediaKeys();
+});
+chrome.windows.onFocusChanged.addListener((winId) => {
+  if (winId !== chrome.windows.WINDOW_ID_NONE) void updateNativeSimulateMediaKeys();
 });
 
 // Keep-alive: reconnect native host if needed

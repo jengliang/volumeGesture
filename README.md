@@ -46,7 +46,8 @@ A translucent overlay briefly confirms each detected gesture.
 
 ## Supported sites
 
-- **YouTube** — built-in next/previous navigation
+- **YouTube (watch / embed)** — OS media keys (next/previous) via the native host; minimized playback usually works
+- **YouTube Shorts** (`/shorts/…`) — vertical reel; the extension uses in-page **next/previous** controls and **Arrow Down / Arrow Up**. When Shorts is the tab that would receive the gesture (same rule as other sites: audible tab first), the native host **skips** simulating OS media keys so navigation does not double-fire.
 - **Facebook** — scrolls between videos in feed, Watch, and Reels
 - **MSN** — scroll-to-play feed; each gesture scrolls the page (see **Feed scroll** in Settings)
 - **Other sites** — finds next/previous buttons or scrolls between video elements
