@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const statusEl = document.getElementById("status");
 
   chrome.storage.sync.get(
-    { enabled: true, gestureWindowMs: 1000, feedScrollPercent: 100 },
+    { enabled: true, gestureWindowMs: 1000, feedScrollPercent: 80 },
     (items) => {
       enabledEl.checked = items.enabled;
       let gwm = items.gestureWindowMs;
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
       windowEl.value = gwm;
       windowValueEl.textContent = gwm;
       let pct = items.feedScrollPercent;
-      if (pct < 80) pct = 80;
+      if (pct < 70) pct = 70;
       if (pct > 100) pct = 100;
       scrollPctEl.value = pct;
       scrollPctValueEl.textContent = pct;

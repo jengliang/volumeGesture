@@ -37,7 +37,7 @@ function connectNativeHost() {
 
   // Send current settings + whether to fire OS media keys (off on YouTube Shorts)
   chrome.storage.sync.get(
-    { gestureWindowMs: 1000, feedScrollPercent: 100 },
+    { gestureWindowMs: 1000, feedScrollPercent: 80 },
     (items) => {
       if (!port) return;
       shouldSimulateMediaKeysForGestureContext().then((simulateMediaKeys) => {
@@ -84,9 +84,9 @@ async function updateNativeSimulateMediaKeys() {
 async function handleGesture(gesture) {
   try {
     const items = await chrome.storage.sync.get({
-      feedScrollPercent: 100,
+      feedScrollPercent: 80,
     });
-    const scrollPct = Math.min(100, Math.max(80, items.feedScrollPercent || 100));
+    const scrollPct = Math.min(100, Math.max(70, items.feedScrollPercent || 80));
 
     let tabs = await chrome.tabs.query({ audible: true });
     if (!tabs || tabs.length === 0) {
